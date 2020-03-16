@@ -10,11 +10,15 @@ import { createStackNavigator } from 'react-navigation-stack'
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { Icon } from 'react-native-elements'
-import LandingScreen from './src/screens/Landing'
+import Home from './src/screens/Home'
+import Events from './src/screens/Events'
+import Ticket from './src/screens/Tickets'
+import Notification from './src/screens/Notification'
+import Profile from './src/screens/Profile'
 
 const HomeStack = createStackNavigator({
   Home: {
-    screen: LandingScreen,
+    screen: Home,
     navigationOptions: {
       headerTitle: 'Home'
     }
@@ -22,7 +26,7 @@ const HomeStack = createStackNavigator({
 }, { initialRouteName: 'Home' })
 const EventsStack = createStackNavigator({
   Landing: {
-    screen: LandingScreen,
+    screen: Events,
     navigationOptions: {
       header: null
     }
@@ -31,7 +35,7 @@ const EventsStack = createStackNavigator({
 
 const TicketStack = createStackNavigator({
   Ticket: {
-    screen: LandingScreen,
+    screen: Ticket,
     navigationOptions: {
       header: null
     }
@@ -40,7 +44,7 @@ const TicketStack = createStackNavigator({
 
 const NotificationStack = createStackNavigator({
   Notification: {
-    screen: LandingScreen,
+    screen: Notification,
     navigationOptions: {
       header: null
     }
@@ -49,7 +53,7 @@ const NotificationStack = createStackNavigator({
 
 const ProfileStack = createStackNavigator({
   Profile: {
-    screen: LandingScreen,
+    screen: Profile,
     navigationOptions: {
       header: null
     }
