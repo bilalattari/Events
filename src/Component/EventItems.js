@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import {
   StyleSheet,
   View, TouchableOpacity,
-   ScrollView,Dimensions,
+  ScrollView, Dimensions,
   Image, FlatList
 } from 'react-native';
 
@@ -10,11 +10,11 @@ let width = Dimensions.get('screen').width
 import { Icon } from 'react-native-elements';
 import CustomText from './Text'
 import Stars from './Stars'
-export default HorizontalEventItem = ({ data }) =>
-  <TouchableOpacity style={{ marginHorizontal: 7 }}>
+export default HorizontalEventItem = ({ data , onPress}) =>
+  <TouchableOpacity style={{ width : width - 40 , marginHorizontal : 5 , alignSelf : "center" }} onPress={() => onPress ? onPress() : null}>
     <Image source={data.thumbnail}
       style={{
-        height: 230, width: width - 40, resizeMode: 'cover',
+        height: 230, width: '100%', resizeMode: 'cover',
         backgroundColor: '#000', borderRadius: 12
       }} />
     <View style={{ paddingHorizontal: 5 }}>

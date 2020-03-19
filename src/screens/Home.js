@@ -2,14 +2,13 @@
 
 import React, { Fragment } from 'react';
 import {
-  StyleSheet,View,FlatList,TouchableOpacity,Image,
-   ScrollView,
+  StyleSheet, View, FlatList, TouchableOpacity, Image,
+  ScrollView,
 } from 'react-native';
 import { Icon, SearchBar } from 'react-native-elements';
 import HorizontalEventItem from '../Component/EventItems'
 import Header from '../Component/header'
 import Text from '../Component/Text'
-
 export const ENTRIES1 = [
   {
     title: 'Beautiful and dramatic Antelope Canyon',
@@ -47,13 +46,22 @@ export const ENTRIES1 = [
     thumbnail: require('../assets/landingScreen/6.jpg')
   }
 ];
-
+let searchEvents = [
+  { name: 'Event Party' },
+  { name: 'New YOor Party' },
+  { name: 'Great Party' },
+  { name: 'Nighty Party' },
+  { name: 'Night Party' },
+  { name: 'Nights Party' },
+  { name: 'New Year Party' },
+]
 class LandingScreen extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       imageNum: 0,
       search: '',
+      serachDone: false,
       selectedItem: 0
     }
   }
@@ -67,10 +75,10 @@ class LandingScreen extends React.Component {
   }
 
   updateSearch = search => {
-    this.setState({ search });
+    this.setState({ search  , serachDone :false});
   }
   render() {
-    let { imageNum, selectedItem } = this.state
+    let { imageNum, selectedItem, search, serachDone } = this.state
     return (
       <ScrollView style={styles.container}>
 
@@ -93,7 +101,7 @@ class LandingScreen extends React.Component {
           containerStyle={{
             borderColor: '#fff', padding: 1, width: '90%', borderTopColor: '#ccc', borderBottomColor: '#ccc',
             borderRadius: 5, alignSelf: 'center', borderColor: "#FFFAFA", borderTopWidth: 0,
-            backgroundColor: "#FFFAFA", marginVertical: 12,
+            backgroundColor: "#FFFAFA", marginTop: 12
           }}
           inputContainerStyle={{
             backgroundColor: "#FFFAFA",
@@ -101,68 +109,99 @@ class LandingScreen extends React.Component {
           }}
           value={this.state.search}
         />
-        <View style={{ height: 40 }}>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {
-              ['Popuplar', 'Party', 'E-Gemain', 'Culture', 'Sports', 'Festivals', 'New Events'].map((data, index) =>
-                <TouchableOpacity
-                  onPress={() => this.setState({ selectedItem: index })}
-                  style={[{ padding: 4, marginHorizontal: 8 }, selectedItem === index ?
-                    { borderBottomColor: '#000', borderBottomWidth: 1, } : null]}>
-                  <Text text={data} />
-                </TouchableOpacity>
-              )
-            }
-          </ScrollView>
-        </View>
-        
-        <Header heading={'Upcoming Events'} subHeading={'View all'} />
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {
-              ENTRIES1.map((data) =>
-                <HorizontalEventItem data={data} />
-              )
-            }
-          </ScrollView>
-        <Header heading={'Trending Events'} subHeading={'View all'} />
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {
-              ENTRIES1.map((data) =>
-                <HorizontalEventItem data={data} />
-              )
-            }
-          </ScrollView>
-        <Header heading={'Trending Events'} subHeading={'View all'} />
         {
-          ENTRIES1.map((data) =>
-            <TouchableOpacity style={{ margin: 7, flexDirection: "row" }}>
-              <Image source={data.thumbnail}
-                style={{
-                  height: 125, width: 125, resizeMode: 'cover',
-                  backgroundColor: '#000', borderRadius: 12
-                }} />
-              <View style={{ paddingHorizontal: 8 }}>
-                <Text text={'Quit Cloubing VIP Heated'} bold={true} font={18} />
-                <Text text={'Rooftop Party'} bold={true} font={18} />
-                <View style = {{marginTop  :4}}>
-                  <Text text={'Sports'} font={12} color={'green'} />
-                  <View style={{ flexDirection: 'row', alignItems: "center" }}>
-                    <Icon type={'font-awesome'} name={'calendar'} color={'#ccc'} size={11} />
-                    <Text text={'11 April 2020'} font={12} marginLeft={6} style={{ marginVertical: 0 }} />
-                  </View>
-                  <View style={{
-                    flexDirection: "row", justifyContent: 'space-between',
-                    height: 20, alignItems: "center"
-                  }}>
-                    <View style={{ flexDirection: 'row', alignItems: "center" }}>
-                      <Icon type={'font-awesome'} name={'map-marker'} color={'#ccc'} size={16} />
-                      <Text text={'North Nazimabad Block..'} font={12} marginLeft={6} style={{ marginVertical: 0 }} />
-                    </View>
-                  </View>
-                </View>
+          serachDone ?
+            <Text text={"28 party events are found in New Youk"}
+              align={'center'} color={'grey'}
+              style={{ marginVertical: 6 }} />
+            : null}
+        {
+          search !== '' ?
+            <View style={{
+              width: '89%', alignSelf: "center", borderColor: "#ccc",
+              borderRightWidth: 1, borderLeftWidth: 1
+            }}>
+              <FlatList
+                data={searchEvents}
+                keyExtractor={(item) => `${item.name}`}
+                renderItem={({ item, index }) => <TouchableOpacity style={{
+                  height: 45, borderBottomColor: "#ccc", padding: 8,
+                  borderBottomWidth: 0.5, justifyContent: "center"
+                }} onPress = {()=> this.setState({serachDone : true , search : '' })} >
+                  <Text text={item.name} style={{ marginVertical: 0 }} />
+                </TouchableOpacity>}
+              />
+            </View>
+            :
+            <View>
+              <View style={{ height: 40 }}>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                  {
+                    ['Popuplar', 'Party', 'E-Gemain', 'Culture', 'Sports', 'Festivals', 'New Events'].map((data, index) =>
+                      <TouchableOpacity
+                        onPress={() => this.setState({ selectedItem: index })}
+                        style={[{ padding: 4, marginHorizontal: 8 }, selectedItem === index ?
+                          { borderBottomColor: '#000', borderBottomWidth: 1, } : null]}>
+                        <Text text={data} />
+                      </TouchableOpacity>
+                    )
+                  }
+                </ScrollView>
               </View>
-            </TouchableOpacity>
-          )
+              {
+                serachDone ? 
+                <Header heading={'Upcoming Events'} subHeading={'View all'} />
+               : null}
+              <ScrollView horizontal={!serachDone  ? true : false} showsHorizontalScrollIndicator={false}>
+                {
+                  ENTRIES1.map((data) =>
+                    <HorizontalEventItem data={data} onPress={() => this.props.navigation.navigate('EventDetail')} />
+                  )
+                }
+              </ScrollView>
+              <Header heading={'Trending Events'} subHeading={'View all'} />
+              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                {
+                  ENTRIES1.map((data) =>
+                    <HorizontalEventItem data={data} onPress={() => this.props.navigation.navigate('EventDetail')} />
+                  )
+                }
+              </ScrollView>
+              <Header heading={'Trending Events'} subHeading={'View all'} />
+              {
+                ENTRIES1.map((data) =>
+                  <TouchableOpacity style={{ margin: 7, flexDirection: "row" }}
+                    onPress={() => this.props.navigation.navigate('EventDetail')}>
+                    <Image source={data.thumbnail}
+                      style={{
+                        height: 125, width: 125, resizeMode: 'cover',
+                        backgroundColor: '#000', borderRadius: 12
+                      }} />
+                    <View style={{ paddingHorizontal: 8 }}>
+                      <Text text={'Quit Cloubing VIP Heated'} bold={true} font={18} />
+                      <Text text={'Rooftop Party'} bold={true} font={18} />
+                      <View style={{ marginTop: 4 }}>
+                        <Text text={'Sports'} font={12} color={'green'} />
+                        <View style={{ flexDirection: 'row', alignItems: "center" }}>
+                          <Icon type={'font-awesome'} name={'calendar'} color={'#ccc'} size={11} />
+                          <Text text={'11 April 2020'} font={12} marginLeft={6} style={{ marginVertical: 0 }} />
+                        </View>
+                        <View style={{
+                          flexDirection: "row", justifyContent: 'space-between',
+                          height: 20, alignItems: "center"
+                        }}>
+                          <View style={{ flexDirection: 'row', alignItems: "center" }}>
+                            <Icon type={'font-awesome'} name={'map-marker'} color={'#ccc'} size={16} />
+                            <Text text={'North Nazimabad Block..'} font={12} marginLeft={6} style={{ marginVertical: 0 }} />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+
+                  </TouchableOpacity>
+                )
+              }
+            </View>
         }
       </ScrollView>
 
@@ -174,8 +213,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#FFFAFA'
   },
-  header : { flexDirection: "row", paddingHorizontal: 6, marginVertical: 12 },
-  bedge : {
+  header: { flexDirection: "row", paddingHorizontal: 6, marginVertical: 12 },
+  bedge: {
     height: 18, width: 18, borderRadius: 25, position: "absolute", top: 6, right: 12,
     justifyContent: 'center', alignItems: "center", backgroundColor: 'green'
   },

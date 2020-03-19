@@ -15,12 +15,18 @@ import Events from './src/screens/Events'
 import Ticket from './src/screens/Tickets'
 import Notification from './src/screens/Notification'
 import Profile from './src/screens/Profile'
-
+import EventDetail from './src/screens/Eventdetail'
 const HomeStack = createStackNavigator({
   Home: {
     screen: Home,
     navigationOptions: {
       headerTitle: 'Home'
+    }
+  },
+  EventDetail: {
+    screen: EventDetail,
+    navigationOptions: {
+      headerTitle: 'EventDetail'
     }
   },
 }, { initialRouteName: 'Home' })
