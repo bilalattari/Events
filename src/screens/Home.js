@@ -62,8 +62,10 @@ class LandingScreen extends React.Component {
       imageNum: 0,
       search: '',
       serachDone: false,
-      selectedItem: 0
+      selectedItem: 0,
+      inputFocus: false
     }
+    console.disableYellowBox = true;
   }
   static navigationOptions = {
     header: null
@@ -75,10 +77,10 @@ class LandingScreen extends React.Component {
   }
 
   updateSearch = search => {
-    this.setState({ search  , serachDone :false});
+    this.setState({ search, serachDone: false });
   }
   render() {
-    let { imageNum, selectedItem, search, serachDone } = this.state
+    let { imageNum, selectedItem, search, serachDone, inputFocus } = this.state
     return (
       <ScrollView style={styles.container}>
 
@@ -103,6 +105,8 @@ class LandingScreen extends React.Component {
             borderRadius: 5, alignSelf: 'center', borderColor: "#FFFAFA", borderTopWidth: 0,
             backgroundColor: "#FFFAFA", marginTop: 12
           }}
+          onFocus={() => this.setState({ inputFocus: true })}
+          // onBlur  = {()=> this.setState({inputFocus : false})}
           inputContainerStyle={{
             backgroundColor: "#FFFAFA",
             borderColor: '#ccc', borderWidth: 1, borderTopColor: '#ccc', borderBottomColor: '#ccc'
@@ -116,7 +120,7 @@ class LandingScreen extends React.Component {
               style={{ marginVertical: 6 }} />
             : null}
         {
-          search !== '' ?
+          inputFocus && search !== '' ?
             <View style={{
               width: '89%', alignSelf: "center", borderColor: "#ccc",
               borderRightWidth: 1, borderLeftWidth: 1
@@ -127,18 +131,22 @@ class LandingScreen extends React.Component {
                 renderItem={({ item, index }) => <TouchableOpacity style={{
                   height: 45, borderBottomColor: "#ccc", padding: 8,
                   borderBottomWidth: 0.5, justifyContent: "center"
-                }} onPress = {()=> this.setState({serachDone : true , search : '' })} >
+                }} onPress={() => {
+                  this.props.navigation.navigate("Search", {name  : search})
+                  this.setState({ inputFocus: false })
+                }} >
                   <Text text={item.name} style={{ marginVertical: 0 }} />
                 </TouchableOpacity>}
               />
             </View>
             :
             <View>
-              <View style={{ height: 40 }}>
+              <View style={{ height: 40, marginTop: 6 }}>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                   {
                     ['Popuplar', 'Party', 'E-Gemain', 'Culture', 'Sports', 'Festivals', 'New Events'].map((data, index) =>
                       <TouchableOpacity
+                        key={index}
                         onPress={() => this.setState({ selectedItem: index })}
                         style={[{ padding: 4, marginHorizontal: 8 }, selectedItem === index ?
                           { borderBottomColor: '#000', borderBottomWidth: 1, } : null]}>
@@ -148,29 +156,27 @@ class LandingScreen extends React.Component {
                   }
                 </ScrollView>
               </View>
-              {
-                serachDone ? 
-                <Header heading={'Upcoming Events'} subHeading={'View all'} />
-               : null}
-              <ScrollView horizontal={!serachDone  ? true : false} showsHorizontalScrollIndicator={false}>
+
+              <Header heading={'Upcoming Events'} subHeading={'View all'} />
+              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                 {
-                  ENTRIES1.map((data) =>
-                    <HorizontalEventItem data={data} onPress={() => this.props.navigation.navigate('EventDetail')} />
+                  ENTRIES1.map((data, index) =>
+                    <HorizontalEventItem index={index} data={data} onPress={() => this.props.navigation.navigate('EventDetail')} />
                   )
                 }
               </ScrollView>
               <Header heading={'Trending Events'} subHeading={'View all'} />
               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                 {
-                  ENTRIES1.map((data) =>
-                    <HorizontalEventItem data={data} onPress={() => this.props.navigation.navigate('EventDetail')} />
+                  ENTRIES1.map((data, index) =>
+                    <HorizontalEventItem index={index} data={data} onPress={() => this.props.navigation.navigate('EventDetail')} />
                   )
                 }
               </ScrollView>
               <Header heading={'Trending Events'} subHeading={'View all'} />
               {
-                ENTRIES1.map((data) =>
-                  <TouchableOpacity style={{ margin: 7, flexDirection: "row" }}
+                ENTRIES1.map((data, index) =>
+                  <TouchableOpacity key={index} style={{ margin: 7, flexDirection: "row" }}
                     onPress={() => this.props.navigation.navigate('EventDetail')}>
                     <Image source={data.thumbnail}
                       style={{
@@ -197,7 +203,6 @@ class LandingScreen extends React.Component {
                         </View>
                       </View>
                     </View>
-
                   </TouchableOpacity>
                 )
               }

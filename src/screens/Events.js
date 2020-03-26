@@ -15,10 +15,17 @@ import {
     Text,
     StatusBar,
 } from 'react-native';
+import {
+    Header,
+    LearnMoreLinks,
+    Colors,
+    DebugInstructions,
+    ReloadInstructions,
+} from 'react-native/Libraries/NewAppScreen';
 
 const Events = () => {
     return (
-        <View style = {{flex : 1, justifyContent : 'center' , alignItems : "center"}}>
+        <View style = {{flex : 1,justifyContent : 'center' , alignItems : "center"}}>
             <Text>Events</Text>
         </View>
     );

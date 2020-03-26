@@ -11,6 +11,7 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { Icon } from 'react-native-elements'
 import Home from './src/screens/Home'
+import Search from './src/screens/Search'
 import Events from './src/screens/Events'
 import Ticket from './src/screens/Tickets'
 import Notification from './src/screens/Notification'
@@ -20,24 +21,31 @@ const HomeStack = createStackNavigator({
   Home: {
     screen: Home,
     navigationOptions: {
-      headerTitle: 'Home'
+      headerTitle: 'Home',
+    },
+  },
+  Search: {
+    screen: Search,
+    navigationOptions: {
+      headerTitle: 'Search'
     }
   },
   EventDetail: {
     screen: EventDetail,
     navigationOptions: {
-      headerTitle: 'EventDetail'
+      headerTitle: 'EventDetail',
+      
     }
   },
-}, { initialRouteName: 'Home' })
+}, { initialRouteName: 'Home', })
 const EventsStack = createStackNavigator({
-  Landing: {
+  EventsScreen: {
     screen: Events,
     navigationOptions: {
       header: null
     }
   },
-}, { initialRouteName: 'Landing' });
+}, { initialRouteName: 'EventsScreen', });
 
 const TicketStack = createStackNavigator({
   Ticket: {
@@ -71,38 +79,53 @@ const MainTabs = createBottomTabNavigator({
     screen: HomeStack,
     navigationOptions: {
       title: "Home",
+      tabBarLabel : 'Home',
+      tabBarIcon : ({tintColor})=> <Icon size = {20} type = {'font-awesome'} name = {'home'} color = {tintColor} />
     },
   },
-  NearbyEvents: {
+  Events: {
     screen: EventsStack,
     navigationOptions: {
       title: "Events",
+      tabBarIcon : ({tintColor})=> <Icon size = {20} type = {'font-awesome'} name = {'calendar'} color = {tintColor} />
     },
   },
   Tickets: {
     screen: TicketStack,
     navigationOptions: {
       title: "Tickets",
+      tabBarIcon : ({tintColor})=> <Icon size = {20} type = {'font-awesome'} name = {'ticket'} color = {tintColor} />
+      
     },
   },
   Notification: {
     screen: NotificationStack,
     navigationOptions: {
       title: "Notifications",
+      tabBarIcon : ({tintColor})=> <Icon size = {20} type = {'font-awesome'} name = {'bell-o'} color = {tintColor} />
     },
   },
   Profile: {
     screen: ProfileStack,
     navigationOptions: {
       title: "Profile",
+      tabBarIcon : ({tintColor})=> <Icon size = {20} type = {'feather'} name = {'user'} color = {tintColor} />
     },
   },
 }, {
   initialRouteName: 'Home',
   headerMode: 'none',
-  defaultNavigationOptions: ({ navigation }) => ({
-    tabBarComponent: (props) => <BottomComponent routeName={navigation.state.routeName} {...props} />
+  tabBarOptions: {
+    keyboardHidesTabBar: true
+  },
+  defaultNavigationOptions : ({navigation})=>({
+    tabBarVisible : navigation.state.key === 'Home' && navigation.state.routes[1] ? false : true 
   })
+  // defaultNavigationOptions: ({ navigation ,  }) => ({
+  //     tabBarComponent: (props) => <BottomComponent
+  //       routeName={navigation.state.routeName}
+  //       {...props} />
+  //      }),
 });
 const MainDrawer = createDrawerNavigator({
   MainTabs: MainTabs,
@@ -135,7 +158,7 @@ class BottomComponent extends React.Component {
     const icons = [{
       name: "Home",
       iconName: 'home'
-    }, { name: "Nearby Events", iconName: 'calendar' },
+    }, { name: "Search", iconName: 'search' },
     { name: "Tickets", iconName: 'ticket' },
     { name: "Notification", iconName: 'bell' },
     { name: "Profile", iconName: 'user' },]
@@ -147,8 +170,8 @@ class BottomComponent extends React.Component {
               onPress={() => this.props.navigation.navigate(this.props.navigation.state.routes[index].routes[0].routeName)}
               style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
             >
-              <Icon type={'font-awesome'} name={data.iconName} color={data.name === this.props.routeName ? 'blue': '#ccc'} size={24} />
-              <Text style={{ fontSize: 12 , color : data.name === this.props.routeName ? 'blue': '#ccc' }}>{data.name}</Text>
+              <Icon type={'font-awesome'} name={data.iconName} color={data.name === this.props.routeName ? 'blue' : '#ccc'} size={24} />
+              <Text style={{ fontSize: 12, color: data.name === this.props.routeName ? 'blue' : '#ccc' }}>{data.name}</Text>
             </TouchableOpacity>
           )
         }
